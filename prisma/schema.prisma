@@ -1,21 +1,123 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
-// prisma/schema.prisma
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model accounts {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique(map: "sqlite_autoindex_accounts_1")
+  password_hash    String
+  verified_account Boolean?
+  verified_user    Boolean?
+  updated_at       DateTime?
+  created_at       DateTime?
 }
 
-model Country {
-  id        Int    @id @default(autoincrement())
-  name      String @unique
-  iso3166_2 String @unique
-  iso3166_3 String @unique
-  num_code  Int    @unique
+model admins {
+  id           Int       @id @default(autoincrement())
+  num_id       String    @unique(map: "sqlite_autoindex_admins_1")
+  nick_name    String    @unique(map: "sqlite_autoindex_admins_2")
+  first_name   String
+  last_name    String
+  birth_date   DateTime?
+  home_address String?
+  postal_code  String?
+  cell_phone   String?
+  home_phone   String?
+  updated_at   DateTime?
+  created_at   DateTime?
+}
+
+model businesses {
+  id          Int       @id @default(autoincrement())
+  account_id  Int
+  country_id  Int
+  state_id    Int
+  city_id     Int
+  name        String?
+  vision      String?
+  mission     String?
+  motto       String?
+  postal_code String?
+  cell_phone  String?
+  home_phone  String?
+  updated_at  DateTime?
+  created_at  DateTime?
+}
+
+model cities {
+  id       Int    @id @default(autoincrement())
+  state_id Int
+  name     String
+}
+
+model countries {
+  id         Int    @id @default(autoincrement())
+  name       String @unique(map: "sqlite_autoindex_countries_1")
+  iso3166_2  String @unique(map: "sqlite_autoindex_countries_2")
+  iso3166_3  String @unique(map: "sqlite_autoindex_countries_3")
+  num_code   Int    @unique(map: "sqlite_autoindex_countries_4")
   phone_code String
+}
+
+model genders {
+  id   Int    @id @default(autoincrement())
+  name String @unique(map: "sqlite_autoindex_genders_1")
+}
+
+model genders_by_languages {
+  id          Int    @id @default(autoincrement())
+  language_id Int
+  genders_id  Int
+  name        String
+}
+
+model holidays_by_countries {
+  id           Int      @id @default(autoincrement())
+  country_id   Int
+  language_id  Int
+  holiday_date DateTime
+}
+
+model languages {
+  id       Int    @id @default(autoincrement())
+  name     String @unique(map: "sqlite_autoindex_languages_1")
+  iso639_1 String @unique(map: "sqlite_autoindex_languages_2")
+  iso639_2 String @unique(map: "sqlite_autoindex_languages_3")
+}
+
+model states {
+  id         Int    @id @default(autoincrement())
+  country_id Int
+  name       String
+}
+
+model type_documents {
+  id          Int    @id @default(autoincrement())
+  country_id  Int
+  language_id Int
+  name        String
+}
+
+model users {
+  id               Int       @id @default(autoincrement())
+  account_id       Int       @unique(map: "sqlite_autoindex_users_1")
+  type_document_id Int
+  gender_id        Int
+  country_id       Int
+  state_id         Int
+  city_id          Int
+  num_id           String    @unique(map: "sqlite_autoindex_users_2")
+  nick_name        String    @unique(map: "sqlite_autoindex_users_3")
+  first_name       String
+  last_name        String
+  birth_date       DateTime?
+  home_address     String?
+  postal_code      String?
+  cell_phone       String?
+  home_phone       String?
 }
