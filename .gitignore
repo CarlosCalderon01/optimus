@@ -4,6 +4,9 @@
 /build
 /temp
 
+# specific files
+prisma/db/dev.db
+
 # Logs
 logs
 *.log
