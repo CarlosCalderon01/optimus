@@ -8,9 +8,12 @@ Transformers es una iniciativa para la construcción de un aplicativo web, compu
 Optimus es el líder del equipo. Su principal objetivo es cargar con la responsabilidad del grupo, siempre dispuesto a reaccionar rápidamente a cualquier situación desde su posición de liderazgo. Como back-end, Optimus se encarga de administrar, distribuir y ejecutar todos los procesos críticos del sistema. En su rol, NestJS es su escudo y su framework, proporcionando la protección y la estructura necesarias para manejar eficientemente todas las operaciones del equipo.
 
 <p align="center">
-<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
-</a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
+
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
+
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
