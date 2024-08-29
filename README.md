@@ -11,9 +11,6 @@ Optimus es el líder del equipo. Su principal objetivo es cargar con la responsa
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://docs.nestjs.com/
-
 Optimus es el backend de un aplicativo web desarrollado con NestJS y TypeScript, diseñado para proporcionar una infraestructura robusta y escalable para aplicaciones web. Su objetivo principal es facilitar la gestión de clientes, productos, facturación y más, lo que lo convierte en una solución ideal para pequeñas empresas que buscan eficiencia y adaptabilidad en sus operaciones.
 
 Optimus sigue una arquitectura monolítica, lo que significa que es una aplicación central compuesta por múltiples módulos integrados. Utiliza el patrón de diseño MVC (Modelo-Vista-Controlador), asegurando una separación clara entre la lógica de negocio, la presentación y el manejo de datos. Para la gestión de bases de datos, Optimus utiliza SQLite, facilitando un almacenamiento ligero y eficiente, y Prisma como ORM (Object-Relational Mapping) para la interacción con la base de datos de manera segura y optimizada.
