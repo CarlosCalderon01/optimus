@@ -1,85 +1,53 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
+#### Introducción
+
+Transformers es una iniciativa para la construcción de un aplicativo web, compuesta por un stack tecnológico organizado en tres componentes clave: Arcee, Optimus y Bumblebee. Cada uno de estos miembros está diseñado para cumplir un rol específico, asegurando el correcto funcionamiento del equipo en conjunto. Arcee se encarga de la gestión de la base de datos, Bumblebee se enfoca en el front-end, y Optimus lidera como el back-end.
+
+# Proyecto Optimus
+
+Optimus es el líder del equipo. Su principal objetivo es cargar con la responsabilidad del grupo, siempre dispuesto a reaccionar rápidamente a cualquier situación desde su posición de liderazgo. Como back-end, Optimus se encarga de administrar, distribuir y ejecutar todos los procesos críticos del sistema. En su rol, NestJS es su escudo y su framework, proporcionando la protección y la estructura necesarias para manejar eficientemente todas las operaciones del equipo.
+
+<p align="center">
+<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" />
+</a>
+</p>
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Optimus es el backend de un aplicativo web desarrollado con NestJS y TypeScript, diseñado para proporcionar una infraestructura robusta y escalable para aplicaciones web. Su objetivo principal es facilitar la gestión de clientes, productos, facturación y más, lo que lo convierte en una solución ideal para pequeñas empresas que buscan eficiencia y adaptabilidad en sus operaciones.
 
-## Description
+Optimus sigue una arquitectura monolítica, lo que significa que es una aplicación central compuesta por múltiples módulos integrados. Utiliza el patrón de diseño MVC (Modelo-Vista-Controlador), asegurando una separación clara entre la lógica de negocio, la presentación y el manejo de datos. Para la gestión de bases de datos, Optimus utiliza SQLite, facilitando un almacenamiento ligero y eficiente, y Prisma como ORM (Object-Relational Mapping) para la interacción con la base de datos de manera segura y optimizada.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## thecnologias:
 
-## Project setup
+**Framework:** NestJS
+**Lenguaje:** TypeScript
+**Base de datos:** SQLite
+**Arquitectura:** Monolítica
+**Patrón de diseño:** MVC (Modelo-Vista-Controlador)
+**ORM (Object-Relational Mapping):** Prisma
 
-```bash
-$ npm install
-```
+## Características
 
-## Compile and run the project
+- Gestión de usuarios y roles.
+- API RESTful con autenticación.
+- Agendar citas y reuniones.
+- Gestión de facturación.
 
-```bash
-# development
-$ npm run start
+## Herramientas
 
-# watch mode
-$ npm run start:dev
+### menu-optimus.bat:
 
-# production mode
-$ npm run start:prod
-```
+- Es una herramienta que contiene scripts listados en un menú, diseñados para automatizar los procesos de desarrollo en NestJS que originalmente se encontraban en el archivo **package.json**.
 
-## Run tests
+### menu-arcee.bat:
+- Es una herramienta que contiene scripts listados en un menú, utilizados para automatizar los procesos relacionados con la base de datos.
 
-```bash
-# unit tests
-$ npm run test
+## Contacto
 
-# e2e tests
-$ npm run test:e2e
+- **Nombre:** Carlos Alberto Calderón Barrios
+- **Correo electrónico:** [Carlos.Calderon01@Outlook.com](mailto:Carlos.Calderon01@Outlook.com)
+- **Teléfono celular:** [316-399-6826](tel:3163996826)
+- **LinkedIn:** [linkedin.com/in/carloscalderon01](https://www.linkedin.com/in/carloscalderon01/)
 
-# test coverage
-$ npm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# End
