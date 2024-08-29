@@ -12,10 +12,7 @@ Optimus es el líder del equipo. Su principal objetivo es cargar con la responsa
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[circleci-url]: https://docs.nestjs.com/
 
 Optimus es el backend de un aplicativo web desarrollado con NestJS y TypeScript, diseñado para proporcionar una infraestructura robusta y escalable para aplicaciones web. Su objetivo principal es facilitar la gestión de clientes, productos, facturación y más, lo que lo convierte en una solución ideal para pequeñas empresas que buscan eficiencia y adaptabilidad en sus operaciones.
 
