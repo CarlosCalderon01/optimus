@@ -3,6 +3,7 @@
 /node_modules
 /build
 /temp
+/src/database/client
 
 # specific files
 prisma/db/dev.db

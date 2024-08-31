@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "sqlite"  // Cambia a tu proveedor de base de datos si es diferente
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique(map: "sqlite_autoindex_accounts_1")
+  password_hash    String
+  verified_account Boolean?
+  verified_user    Boolean?
+  updated_at       DateTime?
+  created_at       DateTime?
+}
