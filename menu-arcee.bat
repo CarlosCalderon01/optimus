@@ -2,7 +2,7 @@
 setlocal
 
 REM Ruta de la base de datos
-set DB_PATH=prisma\db\dev.db
+set DB_PATH=src\database\production.db
 
 REM Ruta base donde se guardarán y buscarán las copias de seguridad
 set BACKUP_BASE_DIR=C:\Users\carlo\Documents\arcee\src\backup
@@ -24,16 +24,14 @@ echo 0. Salir
 echo 1. Copia de seguridad de solo la estructura de la base de datos
 echo 2. Copia de seguridad de solo los datos de la base de datos
 echo 3. Copia de seguridad de ambos (estructura y datos) de la base de datos
-echo 4. Ejecutar copia de seguridad de estructura y datos por separado
 echo 5. Restaurar solo la estructura de la base de datos
 echo 6. Restaurar solo los datos de la base de datos
 echo 7. Restaurar ambos (estructura y datos) de la base de datos
-set /p OPTION=Ingrese su opción (0, 1, 2, 3, 4, 5, 6, 7): 
+set /p OPTION=Ingrese su opción (0, 1, 2, 3, 5, 6, 7): 
 
 if "%OPTION%"=="1" goto BACKUP_SCHEMA
 if "%OPTION%"=="2" goto BACKUP_DATA
 if "%OPTION%"=="3" goto BACKUP_DB
-if "%OPTION%"=="4" goto BACKUP_BOTH
 if "%OPTION%"=="5" goto RESTORE_SCHEMA
 if "%OPTION%"=="6" goto RESTORE_DATA
 if "%OPTION%"=="7" goto RESTORE_DB
@@ -54,17 +52,8 @@ goto MENU
 
 :BACKUP_DB
 echo Creando copia de seguridad completa (estructura y datos) de la base de datos...
-sqlite3 %DB_PATH% .dump > %BACKUP_DIR%\db_%DATE%.sql
-echo Copia de seguridad completa completada: %BACKUP_DIR%\db_%DATE%.sql
-goto MENU
-
-:BACKUP_BOTH
-echo Creando copia de seguridad de la estructura de la base de datos...
-sqlite3 %DB_PATH% .schema > %BACKUP_DIR%\schema_%DATE%.sql
-echo Copia de seguridad de la estructura completada: %BACKUP_DIR%\schema_%DATE%.sql
-echo Creando copia de seguridad de los datos de la base de datos...
-sqlite3 %DB_PATH% ".mode insert" ".dump" > %BACKUP_DIR%\data_%DATE%.sql
-echo Copia de seguridad de los datos completada: %BACKUP_DIR%\data_%DATE%.sql
+sqlite3 %DB_PATH% .dump > %BACKUP_DIR%\backup_%DATE%.sql
+echo Copia de seguridad completa completada: %BACKUP_DIR%\backup_%DATE%.sql
 goto MENU
 
 :RESTORE_SCHEMA
@@ -84,7 +73,7 @@ goto MENU
 :RESTORE_DB
 echo Restaurando estructura y datos de la base de datos...
 set /p RESTORE_DATE=Ingrese la fecha de la copia de seguridad (YYYYMMDD):
-sqlite3 %DB_PATH% < %BACKUP_BASE_DIR%\%RESTORE_DATE%\db_%RESTORE_DATE%.sql
+sqlite3 %DB_PATH% < %BACKUP_BASE_DIR%\%RESTORE_DATE%\backup_%RESTORE_DATE%.sql
 echo Restauración completa de la base de datos completada.
 goto MENU
 
