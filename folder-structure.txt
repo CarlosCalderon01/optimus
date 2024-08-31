@@ -1,0 +1,11 @@
+├── app.controller.spec.ts
+├── app.controller.ts
+├── app.module.ts
+├── app.service.ts
+├── main.ts
+└── prisma
+    ├── prisma.controller.spec.ts
+    ├── prisma.controller.ts
+    ├── prisma.module.ts
+    ├── prisma.service.spec.ts
+    └── prisma.service.ts
