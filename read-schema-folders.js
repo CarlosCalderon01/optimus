@@ -27,8 +27,13 @@ function writeStructureToFile(dirPath, outputFile) {
   console.log(`Estructura de carpetas guardada en: ${outputFile}`);
 }
 
-// Cambia la ruta a la raíz de tu proyecto
-const projectRoot = 'C:\\Users\\carlo\\Documents\\optimus';
-const outputFilePath = 'C:\\Users\\carlo\\Documents\\optimus\\folder-structure.txt';
+// Cambia la ruta a la raíz de tu proyecto (ahora relativa)
+const projectRoot = path.join(__dirname, 'src');
+const outputFilePath = path.join('temp', 'folder-structure.txt');
+
+// Crea la carpeta de salida si no existe
+if (!fs.existsSync('temp')) {
+  fs.mkdirSync('temp', { recursive: true });
+}
 
 writeStructureToFile(projectRoot, outputFilePath);
