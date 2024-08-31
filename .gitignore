@@ -7,6 +7,7 @@
 
 # specific files
 prisma/db/dev.db
+/folder-structure.txt
 
 # Logs
 logs

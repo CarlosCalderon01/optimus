@@ -28,7 +28,7 @@ function writeStructureToFile(dirPath, outputFile) {
 }
 
 // Cambia la ruta a la raíz de tu proyecto
-const projectRoot = 'C:\\Users\\carlo\\Documents\\optimus\\src';
+const projectRoot = 'C:\\Users\\carlo\\Documents\\optimus';
 const outputFilePath = 'C:\\Users\\carlo\\Documents\\optimus\\folder-structure.txt';
 
 writeStructureToFile(projectRoot, outputFilePath);
