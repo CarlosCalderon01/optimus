@@ -255,11 +255,15 @@ model appointments {
   customer_id        Int // Clave foránea para cliente
   appointment_status appointment_statuses @relation(fields: [status_id], references: [id]) // Relación con la tabla `appointment_statuses`
   status_id          Int // Clave foránea para estado de la cita
-  service            String // Servicio ofrecido
-  appointment_date   DateTime // Fecha y hora de la cita
-  duration_minutes   Int // Duración de la cita en minutos
-  created_at         DateTime             @default(now()) // Fecha de creación
-  updated_at         DateTime             @default(now()) @updatedAt // Fecha de actualización automática
+
+  title        String // titulo de la cita
+  service      String // descripción de la cita
+  observations String // observaciones o apuntes de la cita
+  start_date   DateTime // Fecha y hora de inicio de la cita
+  end_date     DateTime // Fecha y hora de finalización de la cita
+
+  created_at DateTime @default(now()) // Fecha de creación
+  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
 }
 
 model invoices {
