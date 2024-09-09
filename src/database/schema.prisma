@@ -14,116 +14,174 @@ datasource db {
 }
 
 model accounts {
-  id               Int       @id @default(autoincrement())
-  email            String    @unique(map: "sqlite_autoindex_accounts_1")
-  password_hash    String
-  verified_account Boolean?
-  verified_user    Boolean?
-  updated_at       DateTime?
-  created_at       DateTime?
-}
+  id Int @id @default(autoincrement()) // Identificador único autoincremental
 
-model admins {
-  id           Int       @id @default(autoincrement())
-  num_id       String    @unique(map: "sqlite_autoindex_admins_1")
-  nick_name    String    @unique(map: "sqlite_autoindex_admins_2")
-  first_name   String
-  last_name    String
-  birth_date   DateTime?
-  home_address String?
-  postal_code  String?
-  cell_phone   String?
-  home_phone   String?
-  updated_at   DateTime?
-  created_at   DateTime?
+  type_document    type_documents @relation(fields: [type_document_id], references: [id]) // Relación con la tabla `type_documents`
+  type_document_id Int // Clave foránea para tipo de documento
+
+  gender    genders @relation(fields: [gender_id], references: [id]) // Relación con la tabla `genders`
+  gender_id Boolean @default(false) // Clave foránea para género (Boolean)
+
+  country    countries @relation(fields: [country_id], references: [id]) // Relación con la tabla `countries`
+  country_id Int // Clave foránea para país
+
+  state    states @relation(fields: [state_id], references: [id]) // Relación con la tabla `states`
+  state_id Int // Clave foránea para estado
+
+  city    cities @relation(fields: [city_id], references: [id]) // Relación con la tabla `cities`
+  city_id Int // Clave foránea para ciudad
+
+  email            String       @unique(map: "sqlite_autoindex_accounts_1") // Email único con índice
+  password_hash    String // Hash de la contraseña
+  num_id           String       @unique(map: "sqlite_autoindex_accounts_2") // Número de identificación único
+  nick_name        String       @unique(map: "sqlite_autoindex_accounts_3") // Apodo único
+  first_name       String // Nombre de pila
+  last_name        String // Apellido
+  birth_date       DateTime? // Fecha de nacimiento (opcional)
+  home_address     String? // Dirección del hogar (opcional)
+  postal_code      String? // Código postal (opcional)
+  cell_phone       String? // Teléfono celular (opcional)
+  home_phone       String? // Teléfono fijo (opcional)
+  verified_account Boolean      @default(false) // Cuenta verificada, valor predeterminado false
+  verified_user    Boolean      @default(false) // Usuario verificado, valor predeterminado false
+  updated_at       DateTime     @default(now()) @updatedAt // Fecha de actualización automática
+  created_at       DateTime     @default(now()) // Fecha de creación predeterminada a la fecha actual
+  businesses       businesses[]
+
+  @@index([email]) // Índice en el campo email
+  @@index([num_id]) // Índice en número de identificación
+  @@index([nick_name]) // Índice en apodo
 }
 
 model businesses {
-  id          Int       @id @default(autoincrement())
-  account_id  Int
-  country_id  Int
-  state_id    Int
-  city_id     Int
-  name        String?
-  vision      String?
-  mission     String?
-  motto       String?
-  postal_code String?
-  cell_phone  String?
-  home_phone  String?
-  updated_at  DateTime?
-  created_at  DateTime?
+  id Int @id @default(autoincrement()) // Clave primaria autoincremental
+
+  account    accounts @relation(fields: [account_id], references: [id])
+  account_id Int // Relación con accounts
+
+  country    countries @relation(fields: [country_id], references: [id])
+  country_id Int // Relación con countries
+
+  state    states @relation(fields: [state_id], references: [id])
+  state_id Int // Relación con states
+
+  city    cities @relation(fields: [city_id], references: [id])
+  city_id Int // Relación con cities
+
+  business_status business_statuses @relation(fields: [status_id], references: [id])
+  status_id       Int // Clave foránea para el estado del negocio
+
+  name        String? // Nombre del negocio
+  vision      String? // Visión del negocio
+  mission     String? // Misión del negocio
+  motto       String? // Lema del negocio
+  postal_code String? // Código postal
+  cell_phone  String? // Teléfono celular
+  home_phone  String? // Teléfono fijo
+
+  tax_id      String? // Identificación fiscal o número de registro
+  website_url String? // URL del sitio web
+  logo_url    String? // URL del logo del negocio
+  open_hours  String? // Horario de funcionamiento
+
+  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
+  created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
 }
 
-model cities {
-  id       Int    @id @default(autoincrement())
-  state_id Int
-  name     String
-}
+model business_statuses {
+  id          Int     @id @default(autoincrement()) // Clave primaria autoincremental
+  name        String  @unique // Nombre del estado (activo, inactivo, suspendido, etc.)
+  description String? // Descripción del estado (opcional)
 
-model countries {
-  id         Int    @id @default(autoincrement())
-  name       String @unique(map: "sqlite_autoindex_countries_1")
-  iso3166_2  String @unique(map: "sqlite_autoindex_countries_2")
-  iso3166_3  String @unique(map: "sqlite_autoindex_countries_3")
-  num_code   Int    @unique(map: "sqlite_autoindex_countries_4")
-  phone_code String
-}
-
-model genders {
-  id   Int    @id @default(autoincrement())
-  name String @unique(map: "sqlite_autoindex_genders_1")
-}
-
-model genders_by_languages {
-  id          Int    @id @default(autoincrement())
-  language_id Int
-  genders_id  Int
-  name        String
-}
-
-model holidays_by_countries {
-  id           Int      @id @default(autoincrement())
-  country_id   Int
-  language_id  Int
-  holiday_date DateTime
-}
-
-model languages {
-  id       Int    @id @default(autoincrement())
-  name     String @unique(map: "sqlite_autoindex_languages_1")
-  iso639_1 String @unique(map: "sqlite_autoindex_languages_2")
-  iso639_2 String @unique(map: "sqlite_autoindex_languages_3")
-}
-
-model states {
-  id         Int    @id @default(autoincrement())
-  country_id Int
-  name       String
+  businesses businesses[] // Relación uno a muchos con la tabla businesses
 }
 
 model type_documents {
-  id          Int    @id @default(autoincrement())
-  country_id  Int
-  language_id Int
-  name        String
+  id         Int       @id @default(autoincrement()) // Clave primaria autoincremental
+  country    countries @relation(fields: [country_id], references: [id]) // Relación con la tabla `countries`
+  country_id Int // Clave foránea que referencia a `countries`
+  name       String // Nombre del tipo de documento
+
+  accounts accounts[] // Relación uno a muchos con la tabla `accounts`
+
+  @@index([name], name: "idx_type_document_name")
 }
 
-model users {
-  id               Int       @id @default(autoincrement())
-  account_id       Int       @unique(map: "sqlite_autoindex_users_1")
-  type_document_id Int
-  gender_id        Int
-  country_id       Int
-  state_id         Int
-  city_id          Int
-  num_id           String    @unique(map: "sqlite_autoindex_users_2")
-  nick_name        String    @unique(map: "sqlite_autoindex_users_3")
-  first_name       String
-  last_name        String
-  birth_date       DateTime?
-  home_address     String?
-  postal_code      String?
-  cell_phone       String?
-  home_phone       String?
+model countries {
+  id         Int    @id @default(autoincrement()) // Identificador único para el país, autoincremental.  
+  name       String @unique(map: "sqlite_autoindex_countries_1") // Nombre del país, único en la base de datos.  
+  iso3166_2  String @unique(map: "sqlite_autoindex_countries_2") // Código ISO 3166-2 de dos caracteres, único por país.  
+  iso3166_3  String @unique(map: "sqlite_autoindex_countries_3") // Código ISO 3166-3 de tres caracteres, único por país.  
+  num_code   Int    @unique(map: "sqlite_autoindex_countries_4") // Código numérico del país, único.  
+  phone_code String @unique(map: "sqlite_autoindex_countries_5") // Código telefónico internacional del país, único.
+
+  type_documents        type_documents[]
+  states                states[]
+  accounts              accounts[]
+  holidays_by_countries holidays_by_countries[]
+  businesses            businesses[]
+}
+
+model states {
+  id         Int       @id @default(autoincrement()) /// Identificador único para el estado, autoincremental.
+  country    countries @relation(fields: [country_id], references: [id]) /// Relación con la tabla `countries`. Este campo indica a qué país pertenece el estado.
+  country_id Int /// Clave foránea que referencia el país al que pertenece el estado.
+  name       String /// Nombre del estado o región.
+
+  cities     cities[]
+  accounts   accounts[]
+  businesses businesses[]
+}
+
+model cities {
+  id       Int    @id @default(autoincrement()) /// Identificador único para la ciudad, autoincremental.
+  state    states @relation(fields: [state_id], references: [id]) /// Relación con la tabla `states`. Este campo indica a qué estado pertenece la ciudad.
+  state_id Int /// Clave foránea que referencia el estado al que pertenece la ciudad.
+  name     String /// Nombre de la ciudad.
+
+  accounts   accounts[]
+  businesses businesses[]
+}
+
+model genders {
+  id         Boolean @id // Clave primaria de tipo Boolean (sin cambios)
+  name       String // Nombre del género
+  short_name String  @default("") // Nombre corto con valor predeterminado
+
+  accounts             accounts[] // Relación con cuentas
+  genders_by_languages genders_by_languages[] // Relación con traducciones por idioma
+}
+
+model genders_by_languages {
+  id          Int       @id @default(autoincrement()) // Clave primaria autoincremental
+  language    languages @relation(fields: [language_id], references: [id]) // Relación con la tabla 'languages'
+  language_id Int // Clave foránea para relacionar con languages
+  genders     genders   @relation(fields: [genders_id], references: [id]) // Relación con la tabla 'genders'
+  genders_id  Boolean // Clave foránea que referencia la tabla genders
+  name        String // Nombre traducido del género
+  short_name  String // Nombre corto traducido del género
+
+  // Índice en language_id para mejorar las consultas basadas en idiomas
+  @@index([language_id], name: "idx_genders_by_languages_language_id")
+}
+
+model holidays_by_countries {
+  id           Int       @id @default(autoincrement()) // Clave primaria autoincremental
+  country      countries @relation(fields: [country_id], references: [id]) // Relación con la tabla countries
+  country_id   Int // Clave foránea que hace referencia a countries
+  title        String // Título del día festivo
+  description  String // Descripción del día festivo
+  holiday_date DateTime // Fecha del día festivo
+
+  // Índice en country_id para optimizar las consultas que filtren por país
+  @@index([country_id], name: "idx_holidays_by_country")
+}
+
+model languages {
+  id       Int    @id @default(autoincrement()) // Clave primaria autoincremental
+  name     String @unique // Nombre del idioma, único
+  iso639_1 String @unique // Código ISO 639-1 de dos caracteres, único
+  iso639_2 String @unique // Código ISO 639-2 de tres caracteres, único
+
+  genders_by_languages genders_by_languages[] // Relación uno a muchos con genders_by_languages
 }
