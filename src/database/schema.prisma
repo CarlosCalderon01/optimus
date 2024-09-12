@@ -8,10 +8,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+}
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+// ----- // MODELS LIST // ----- //
+
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
+// ----- // ACCOUNTS // ----- // ----- // ----- // ----- // ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model accounts {
   id Int @id @default(autoincrement()) // Identificador único autoincremental
@@ -53,6 +63,10 @@ model accounts {
   @@index([num_id]) // Índice en número de identificación
   @@index([nick_name]) // Índice en apodo
 }
+
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
+// ----- // BUSINESSES // ----- // ----- // ----- // ----- // ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model businesses {
   id Int @id @default(autoincrement()) // Clave primaria autoincremental
@@ -102,6 +116,10 @@ model business_statuses {
 
   businesses businesses[] // Relación uno a muchos con la tabla businesses
 }
+
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
+// ----- // GLOBAL TABLE // ----- // ----- // ----- // ----- // ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model type_documents {
   id         Int       @id @default(autoincrement()) // Clave primaria autoincremental
@@ -209,7 +227,9 @@ model languages {
   genders_by_languages genders_by_languages[] // Relación uno a muchos con genders_by_languages
 }
 
-// ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
+// ----- // CUSTOMERS // ----- // ----- // ----- // ----- // ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model customers {
   id           Int        @id @default(autoincrement()) // Clave primaria autoincremental
@@ -274,9 +294,14 @@ model invoices {
   customer_id    Int // Clave foránea para cliente
   invoice_status invoice_statuses @relation(fields: [status_id], references: [id]) // Relación con la tabla `invoice_statuses`
   status_id      Int // Clave foránea para estado de la factura
-  issue_date     DateTime // Fecha de emisión de la factura
-  due_date       DateTime // Fecha de vencimiento de la factura
-  total_amount   Float // Monto total de la factura
-  created_at     DateTime         @default(now()) // Fecha de creación
-  updated_at     DateTime         @default(now()) @updatedAt // Fecha de actualización automática
+
+  issue_date   DateTime // Fecha de emisión de la factura
+  due_date     DateTime // Fecha de vencimiento de la factura
+  total_amount Float // Monto total de la factura
+  created_at   DateTime @default(now()) // Fecha de creación
+  updated_at   DateTime @default(now()) @updatedAt // Fecha de actualización automática
 }
+
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
+// ----- // CUSTOMERS // ----- // ----- // ----- // ----- // ----- //
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
