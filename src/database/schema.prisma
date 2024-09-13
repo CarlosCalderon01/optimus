@@ -33,11 +33,10 @@ model countries {
   created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual.
   updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática.
 
-  accounts              accounts[]
-  businesses            businesses[]
   holidays_by_countries holidays_by_countries[]
   states                states[]
-  type_documents        type_documents[]
+  user_locations        user_locations[]
+  businesses            businesses[]
 }
 
 model states {
@@ -48,9 +47,9 @@ model states {
   created_at DateTime  @default(now()) // Fecha de creación predeterminada a la fecha actual
   updated_at DateTime  @default(now()) @updatedAt // Fecha de actualización automática
 
-  accounts   accounts[]
-  businesses businesses[]
-  cities     cities[]
+  cities         cities[]
+  user_locations user_locations[]
+  businesses     businesses[]
 }
 
 model cities {
@@ -61,8 +60,8 @@ model cities {
   created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
   updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
 
-  accounts   accounts[]
-  businesses businesses[]
+  user_locations user_locations[]
+  businesses     businesses[]
 }
 
 model holidays_by_countries {
@@ -86,8 +85,6 @@ model languages {
   iso639_2   String   @unique // Código ISO 639-2 de tres caracteres, único
   created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
   updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  genders_by_languages genders_by_languages[] // Relación uno a muchos con genders_by_languages
 }
 
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
@@ -239,78 +236,80 @@ model businesses {
 // ----- // ACCOUNTS - INIT // ----- // ----- // ----- // ----- // ----- //
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
+// Tabla `accounts`: Almacena información relacionada con la cuenta de usuario, como el correo electrónico, 
+// la contraseña y el estado de verificación (tanto del email como de la persona).
 model accounts {
-  id               Int            @id @default(autoincrement()) // Identificador único autoincremental
-  type_document    type_documents @relation(fields: [type_document_id], references: [id]) // Relación con la tabla `type_documents`
-  type_document_id Int // Clave foránea para tipo de documento
-  gender           genders        @relation(fields: [gender_id], references: [id]) // Relación con la tabla `genders`
-  gender_id        Boolean        @default(false) // Clave foránea para género (Boolean)
-  country          countries      @relation(fields: [country_id], references: [id]) // Relación con la tabla `countries`
-  country_id       Int // Clave foránea para país
-  state            states         @relation(fields: [state_id], references: [id]) // Relación con la tabla `states`
-  state_id         Int // Clave foránea para estado
-  city             cities         @relation(fields: [city_id], references: [id]) // Relación con la tabla `cities`
-  city_id          Int // Clave foránea para ciudad
-  email            String         @unique(map: "sqlite_autoindex_accounts_1") // Email único con índice
-  password_hash    String // Hash de la contraseña
-  num_id           String         @unique(map: "sqlite_autoindex_accounts_2") // Número de identificación único
-  nick_name        String         @unique(map: "sqlite_autoindex_accounts_3") // Apodo único
-  first_name       String // Nombre de pila
-  last_name        String // Apellido
-  birth_date       DateTime? // Fecha de nacimiento (opcional)
-  home_address     String? // Dirección del hogar (opcional)
-  postal_code      String? // Código postal (opcional)
-  cell_phone       String? // Teléfono celular (opcional)
-  home_phone       String? // Teléfono fijo (opcional)
-  verified_account Boolean        @default(false) // Cuenta verificada, valor predeterminado false
-  verified_user    Boolean        @default(false) // Usuario verificado, valor predeterminado false
-  updated_at       DateTime       @default(now()) @updatedAt // Fecha de actualización automática
-  created_at       DateTime       @default(now()) // Fecha de creación predeterminada a la fecha actual
+  id                 Int      @id @default(autoincrement()) // Identificador único autoincremental
+  email              String   @unique // Correo electrónico único para la autenticación
+  password_hash      String // Hash de la contraseña para mayor seguridad
+  is_email_verified  Boolean  @default(false) // Indicador de si el correo electrónico ha sido verificado
+  is_person_verified Boolean  @default(false) // Indicador de si la identidad de la persona ha sido verificada
+  updated_at         DateTime @default(now()) @updatedAt // Fecha de actualización automática
+  created_at         DateTime @default(now()) // Fecha de creación de la cuenta
 
+  // Relación con otras tablas
+  users      users[] // Relación uno a muchos con la tabla `users`
   businesses businesses[]
+}
 
-  @@index([email]) // Índice en el campo email
-  @@index([num_id]) // Índice en número de identificación
-  @@index([nick_name]) // Índice en apodo
+// Tabla `users`: Almacena información personal de los usuarios, como nombre, apellido, género y fecha de nacimiento.
+model users {
+  id               Int             @id @default(autoincrement()) // Identificador único autoincremental
+  account_id       Int // Clave foránea para la relación con la tabla `accounts`
+  account          accounts        @relation(fields: [account_id], references: [id]) // Relación muchos a uno con `accounts`
+  gender_id        Int // Clave foránea para la relación con la tabla `genders`
+  gender           genders         @relation(fields: [gender_id], references: [id]) // Relación muchos a uno con `genders`
+  type_documentsId Int
+  type_documents   type_documents? @relation(fields: [type_documentsId], references: [id])
+  first_name       String // Nombre de pila del usuario
+  last_name        String // Apellido del usuario
+  birth_date       DateTime // Fecha de nacimiento del usuario
+
+  user_locations user_locations[] // Relación uno a muchos con la tabla `location_infos`
+  user_contacts  user_contacts[] // Relación uno a muchos con la tabla `contact_infos`
+}
+
+// Tabla `user_locations`: Almacena la ubicación del usuario, incluyendo país, estado y ciudad.
+model user_locations {
+  id         Int       @id @default(autoincrement()) // Identificador único autoincremental
+  user_id    Int // Clave foránea para la relación con la tabla `users`
+  user       users     @relation(fields: [user_id], references: [id]) // Relación muchos a uno con `users`
+  country_id Int // Clave foránea para la relación con la tabla `countries`
+  country    countries @relation(fields: [country_id], references: [id]) // Relación muchos a uno con `countries`
+  state_id   Int // Clave foránea para la relación con la tabla `states`
+  state      states    @relation(fields: [state_id], references: [id]) // Relación muchos a uno con `states`
+  city_id    Int // Clave foránea para la relación con la tabla `cities`
+  city       cities    @relation(fields: [city_id], references: [id]) // Relación muchos a uno con `cities`
+}
+
+// Tabla `user_contacts`: Almacena la información de contacto del usuario, como teléfono celular, teléfono de casa y código postal.
+model user_contacts {
+  id          Int     @id @default(autoincrement()) // Identificador único autoincremental
+  user_id     Int // Clave foránea para la relación con la tabla `users`
+  user        users   @relation(fields: [user_id], references: [id]) // Relación muchos a uno con `users`
+  cell_phone  String? // Número de teléfono celular del usuario (opcional)
+  home_phone  String? // Número de teléfono de casa del usuario (opcional)
+  postal_code String? // Código postal de la dirección del usuario (opcional)
 }
 
 model type_documents {
-  id         Int       @id @default(autoincrement()) // Clave primaria autoincremental
-  country    countries @relation(fields: [country_id], references: [id]) // Relación con la tabla `countries`
-  country_id Int // Clave foránea que referencia a `countries`
-  name       String // Nombre del tipo de documento
-  created_at DateTime  @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at DateTime  @default(now()) @updatedAt // Fecha de actualización automática
+  id          Int      @id @default(autoincrement()) // Identificador único autoincremental
+  name        String // Nombre del tipo de documento (Ej: Pasaporte, Cédula)
+  description String? // Descripción del tipo de documento (opcional)
+  created_at  DateTime @default(now()) // Fecha de creación predeterminada
+  updated_at  DateTime @default(now()) @updatedAt // Fecha de actualización automática
 
-  accounts accounts[] // Relación uno a muchos con la tabla `accounts`
-
-  @@index([name], name: "idx_type_document_name")
+  users users[]
 }
 
 model genders {
-  id         Boolean  @id // Clave primaria de tipo Boolean (sin cambios)
+  id         Int      @id @default(autoincrement()) // Clave primaria de tipo entero autoincremental
   name       String // Nombre del género
   short_name String   @default("") // Nombre corto con valor predeterminado
   created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
   updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
 
-  accounts             accounts[] // Relación con cuentas
-  genders_by_languages genders_by_languages[] // Relación con traducciones por idioma
-}
-
-model genders_by_languages {
-  id          Int       @id @default(autoincrement()) // Clave primaria autoincremental
-  language    languages @relation(fields: [language_id], references: [id]) // Relación con la tabla 'languages'
-  language_id Int // Clave foránea para relacionar con languages
-  genders     genders   @relation(fields: [genders_id], references: [id]) // Relación con la tabla 'genders'
-  genders_id  Boolean // Clave foránea que referencia la tabla genders
-  name        String // Nombre traducido del género
-  short_name  String // Nombre corto traducido del género
-  created_at  DateTime  @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at  DateTime  @default(now()) @updatedAt // Fecha de actualización automática
-
-  // Índice en language_id para mejorar las consultas basadas en idiomas
-  @@index([language_id], name: "idx_genders_by_languages_language_id")
+  users users[] // Relación con usuarios
 }
 
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
