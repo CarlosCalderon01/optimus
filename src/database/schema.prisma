@@ -23,30 +23,30 @@ model countries {
   holidays_by_countries holidays_by_countries[]
   states                states[]
   user_locations        user_locations[]
-  businesses            businesses[]
+  business_locations    business_locations[]
 }
 
 model states {
-  id             Int              @id @default(autoincrement())
-  country        countries        @relation(fields: [country_id], references: [id])
-  country_id     Int
-  name           String
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now()) @updatedAt
-  cities         cities[]
-  user_locations user_locations[]
-  businesses     businesses[]
+  id                 Int                  @id @default(autoincrement())
+  country            countries            @relation(fields: [country_id], references: [id])
+  country_id         Int
+  name               String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now()) @updatedAt
+  cities             cities[]
+  user_locations     user_locations[]
+  business_locations business_locations[]
 }
 
 model cities {
-  id             Int              @id @default(autoincrement())
-  state          states           @relation(fields: [state_id], references: [id])
-  state_id       Int
-  name           String
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now()) @updatedAt
-  user_locations user_locations[]
-  businesses     businesses[]
+  id                 Int                  @id @default(autoincrement())
+  state              states               @relation(fields: [state_id], references: [id])
+  state_id           Int
+  name               String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now()) @updatedAt
+  user_locations     user_locations[]
+  business_locations business_locations[]
 }
 
 model holidays_by_countries {
@@ -58,8 +58,6 @@ model holidays_by_countries {
   holiday_date DateTime
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now()) @updatedAt
-
-  @@index([country_id], name: "idx_holidays_by_country")
 }
 
 model languages {
@@ -146,33 +144,47 @@ model business_statuses {
 }
 
 model businesses {
-  id              Int               @id @default(autoincrement())
-  account_id      Int               @unique
-  account         accounts          @relation(fields: [account_id], references: [id])
-  country_id      Int
-  country         countries         @relation(fields: [country_id], references: [id])
-  state_id        Int
-  state           states            @relation(fields: [state_id], references: [id])
-  city_id         Int
-  city            cities            @relation(fields: [city_id], references: [id])
-  status_id       Int
-  business_status business_statuses @relation(fields: [status_id], references: [id])
-  name            String?
-  vision          String?
-  mission         String?
-  motto           String?
-  postal_code     String?
-  cell_phone      String?
-  home_phone      String?
-  tax_id          String?
-  website_url     String?
-  logo_url        String?
-  open_hours      String?
-  updated_at      DateTime          @default(now()) @updatedAt
-  created_at      DateTime          @default(now())
-  clients         clients[]
-  invoices        invoices[]
-  reservations    reservations[]
+  id                Int                 @id @default(autoincrement())
+  account_id        Int                 @unique
+  account           accounts            @relation(fields: [account_id], references: [id])
+  status_id         Int
+  business_status   business_statuses   @relation(fields: [status_id], references: [id])
+  name              String?
+  vision            String?
+  mission           String?
+  motto             String?
+  tax_id            String?
+  website_url       String?
+  logo_url          String?
+  updated_at        DateTime            @default(now()) @updatedAt
+  created_at        DateTime            @default(now())
+  business_location business_locations?
+  business_contact  business_contacts?
+  clients           clients[]
+  invoices          invoices[]
+  reservations      reservations[]
+}
+
+model business_locations {
+  id          Int        @id @default(autoincrement())
+  business_id Int        @unique
+  business    businesses @relation(fields: [business_id], references: [id])
+  country_id  Int
+  country     countries  @relation(fields: [country_id], references: [id])
+  state_id    Int
+  state       states     @relation(fields: [state_id], references: [id])
+  city_id     Int
+  city        cities     @relation(fields: [city_id], references: [id])
+  address     String?
+  postal_code String?
+}
+
+model business_contacts {
+  id          Int        @id @default(autoincrement())
+  business_id Int        @unique
+  business    businesses @relation(fields: [business_id], references: [id])
+  cell_phone  String?
+  home_phone  String?
 }
 
 model accounts {
