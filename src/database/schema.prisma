@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,22 +11,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ----- // MODELS LIST // ----- //
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // GLOBAL TABLE - INIT // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
 model countries {
-  id         Int      @id @default(autoincrement()) // Identificador único para el país, autoincremental.
-  name       String   @unique // Nombre del país, único en la base de datos.
-  iso3166_2  String   @unique // Código ISO 3166-2 de dos caracteres, único por país.
-  iso3166_3  String   @unique // Código ISO 3166-3 de tres caracteres, único por país.
-  num_code   Int      @unique // Código numérico del país, único.
-  phone_code String   @unique // Código telefónico internacional del país, único.
-  created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual.
-  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática.
-
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique
+  iso3166_2             String                  @unique
+  iso3166_3             String                  @unique
+  num_code              Int                     @unique
+  phone_code            String                  @unique
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @default(now()) @updatedAt
   holidays_by_countries holidays_by_countries[]
   states                states[]
   user_locations        user_locations[]
@@ -40,291 +27,216 @@ model countries {
 }
 
 model states {
-  id         Int       @id @default(autoincrement()) /// Identificador único para el estado, autoincremental.
-  country    countries @relation(fields: [country_id], references: [id]) /// Relación con la tabla `countries`. Este campo indica a qué país pertenece el estado.
-  country_id Int /// Clave foránea que referencia el país al que pertenece el estado.
-  name       String /// Nombre del estado o región.
-  created_at DateTime  @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at DateTime  @default(now()) @updatedAt // Fecha de actualización automática
-
+  id             Int              @id @default(autoincrement())
+  country        countries        @relation(fields: [country_id], references: [id])
+  country_id     Int
+  name           String
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @default(now()) @updatedAt
   cities         cities[]
   user_locations user_locations[]
   businesses     businesses[]
 }
 
 model cities {
-  id         Int      @id @default(autoincrement()) /// Identificador único para la ciudad, autoincremental.
-  state      states   @relation(fields: [state_id], references: [id]) /// Relación con la tabla `states`. Este campo indica a qué estado pertenece la ciudad.
-  state_id   Int /// Clave foránea que referencia el estado al que pertenece la ciudad.
-  name       String /// Nombre de la ciudad.
-  created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
+  id             Int              @id @default(autoincrement())
+  state          states           @relation(fields: [state_id], references: [id])
+  state_id       Int
+  name           String
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @default(now()) @updatedAt
   user_locations user_locations[]
   businesses     businesses[]
 }
 
 model holidays_by_countries {
-  id           Int       @id @default(autoincrement()) // Clave primaria autoincremental
-  country      countries @relation(fields: [country_id], references: [id]) // Relación con la tabla countries
-  country_id   Int // Clave foránea que hace referencia a countries
-  title        String // Título del día festivo
-  description  String // Descripción del día festivo
-  holiday_date DateTime // Fecha del día festivo
-  created_at   DateTime  @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at   DateTime  @default(now()) @updatedAt // Fecha de actualización automática
+  id           Int       @id @default(autoincrement())
+  country      countries @relation(fields: [country_id], references: [id])
+  country_id   Int
+  title        String
+  description  String
+  holiday_date DateTime
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now()) @updatedAt
 
-  // Índice en country_id para optimizar las consultas que filtren por país
   @@index([country_id], name: "idx_holidays_by_country")
 }
 
 model languages {
-  id         Int      @id @default(autoincrement()) // Clave primaria autoincremental
-  name       String   @unique // Nombre del idioma, único
-  iso639_1   String   @unique // Código ISO 639-1 de dos caracteres, único
-  iso639_2   String   @unique // Código ISO 639-2 de tres caracteres, único
-  created_at DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  iso639_1   String   @unique
+  iso639_2   String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // GLOBAL TABLE - END // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // clientS - INIT // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model clients {
-  id           Int        @id @default(autoincrement()) // Clave primaria autoincremental
-  business     businesses @relation(fields: [business_id], references: [id]) // Relación con la tabla `businesses`
-  business_id  Int // Clave foránea para negocio (cada cliente está asociado a un negocio)
-  first_name   String // Nombre del cliente
-  last_name    String // Apellido del cliente
-  email        String? // Email del cliente (opcional)
-  phone_number String? // Teléfono del cliente (opcional)
-  address      String? // Dirección del cliente (opcional)
-  created_at   DateTime   @default(now()) // Fecha de creación
-  updated_at   DateTime   @default(now()) @updatedAt // Fecha de actualización automática
-
+  id           Int            @id @default(autoincrement())
+  business     businesses     @relation(fields: [business_id], references: [id])
+  business_id  Int
+  first_name   String
+  last_name    String
+  email        String?
+  phone_number String?
+  address      String?
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @default(now()) @updatedAt
   invoices     invoices[]
-  reservations reservations[] // Relación uno a muchos con citas (reservations)
+  reservations reservations[]
 }
 
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // clientS - END // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // RESERVATIONS - INIT // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
 model reservation_statuses {
-  id          Int      @id @default(autoincrement()) // Clave primaria autoincremental
-  name        String   @unique // Nombre del estado (ej: confirmada, cancelada, completada)
-  description String? // Descripción del estado (opcional)
-  created_at  DateTime @default(now()) // Fecha de creación predeterminada
-  updated_at  DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  reservations reservations[] // Relación uno a muchos con la tabla `reservations`
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  description  String?
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @default(now()) @updatedAt
+  reservations reservations[]
 }
 
 model reservations {
-  id                 Int                  @id @default(autoincrement()) // Clave primaria autoincremental
-  business           businesses           @relation(fields: [business_id], references: [id]) // Relación con la tabla `businesses`
-  business_id        Int // Clave foránea para negocio
-  client             clients              @relation(fields: [client_id], references: [id]) // Relación con la tabla `clients`
-  client_id          Int // Clave foránea para cliente
-  reservation_status reservation_statuses @relation(fields: [status_id], references: [id]) // Relación con la tabla `reservation_statuses`
-  status_id          Int // Clave foránea para estado de la cita
-  title              String // titulo de la cita
-  service            String // descripción de la cita
-  observations       String // observaciones o apuntes de la cita
-  start_date         DateTime // Fecha y hora de inicio de la cita
-  end_date           DateTime // Fecha y hora de finalización de la cita
-  created_at         DateTime             @default(now()) // Fecha de creación
-  updated_at         DateTime             @default(now()) @updatedAt // Fecha de actualización automática
+  id                 Int                  @id @default(autoincrement())
+  business           businesses           @relation(fields: [business_id], references: [id])
+  business_id        Int
+  client             clients              @relation(fields: [client_id], references: [id])
+  client_id          Int
+  reservation_status reservation_statuses @relation(fields: [status_id], references: [id])
+  status_id          Int
+  title              String
+  service            String
+  observations       String
+  start_date         DateTime
+  end_date           DateTime
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @default(now()) @updatedAt
 }
 
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // RESERVATIONS - END // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // INVOICE - INIT // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
 model invoice_statuses {
-  id          Int      @id @default(autoincrement()) // Clave primaria autoincremental
-  name        String   @unique // Nombre del estado (ej: borrador, pendiente, pagada, vencida, cancelada)
-  description String? // Descripción del estado (opcional)
-  created_at  DateTime @default(now()) // Fecha de creación predeterminada
-  updated_at  DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  invoices invoices[] // Relación uno a muchos con la tabla `invoices`
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @default(now()) @updatedAt
+  invoices    invoices[]
 }
 
 model invoices {
-  id             Int              @id @default(autoincrement()) // Clave primaria autoincremental
-  business       businesses       @relation(fields: [business_id], references: [id]) // Relación con la tabla `businesses`
-  business_id    Int // Clave foránea para negocio
-  client         clients          @relation(fields: [client_id], references: [id]) // Relación con la tabla `clients`
-  client_id      Int // Clave foránea para cliente
-  invoice_status invoice_statuses @relation(fields: [status_id], references: [id]) // Relación con la tabla `invoice_statuses`
-  status_id      Int // Clave foránea para estado de la factura
-  issue_date     DateTime // Fecha de emisión de la factura
-  due_date       DateTime // Fecha de vencimiento de la factura
-  total_amount   Float // Monto total de la factura
-  created_at     DateTime         @default(now()) // Fecha de creación
-  updated_at     DateTime         @default(now()) @updatedAt // Fecha de actualización automática
+  id             Int              @id @default(autoincrement())
+  business       businesses       @relation(fields: [business_id], references: [id])
+  business_id    Int
+  client         clients          @relation(fields: [client_id], references: [id])
+  client_id      Int
+  invoice_status invoice_statuses @relation(fields: [status_id], references: [id])
+  status_id      Int
+  issue_date     DateTime
+  due_date       DateTime
+  total_amount   Float
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @default(now()) @updatedAt
 }
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // INVOICE - END // ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
-// ----- // BUSINESSES - INIT// ----- // ----- // ----- // ----- // ----- //
-// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- //
 
 model business_statuses {
-  id          Int      @id @default(autoincrement()) // Clave primaria autoincremental
-  name        String   @unique // Nombre del estado (activo, inactivo, suspendido, etc.)
-  description String? // Descripción del estado (opcional)
-  created_at  DateTime @default(now()) // Fecha de creación predeterminada a la fecha actual
-  updated_at  DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  businesses businesses[] // Relación uno a muchos con la tabla businesses
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @default(now()) @updatedAt
+  businesses  businesses[]
 }
 
-
 model businesses {
-  id              Int               @id @default(autoincrement()) // Clave primaria autoincremental
-  
-  account_id      Int @unique // Clave foránea única para la relación uno a uno con accounts
-  account         accounts          @relation(fields: [account_id], references: [id]) // Relación uno a uno con accounts
-  
-  country_id      Int // Clave foránea para la relación con countries
-  country         countries         @relation(fields: [country_id], references: [id]) // Relación muchos a uno con countries
-  
-  state_id        Int // Clave foránea para la relación con states
-  state           states            @relation(fields: [state_id], references: [id]) // Relación muchos a uno con states
-  
-  city_id         Int // Clave foránea para la relación con cities
-  city            cities            @relation(fields: [city_id], references: [id]) // Relación muchos a uno con cities
-  
-  status_id       Int // Clave foránea para el estado del negocio
-  business_status business_statuses @relation(fields: [status_id], references: [id]) // Relación muchos a uno con business_statuses
-  
-  name            String? // Nombre del negocio
-  vision          String? // Visión del negocio
-  mission         String? // Misión del negocio
-  motto           String? // Lema del negocio
-  postal_code     String? // Código postal
-  cell_phone      String? // Teléfono celular
-  home_phone      String? // Teléfono fijo
-  tax_id          String? // Identificación fiscal o número de registro
-  website_url     String? // URL del sitio web
-  logo_url        String? // URL del logo del negocio
-  open_hours      String? // Horario de funcionamiento
-  
-  updated_at      DateTime          @default(now()) @updatedAt // Fecha de actualización automática
-  created_at      DateTime          @default(now()) // Fecha de creación predeterminada a la fecha actual
-
-  // Relaciones uno a muchos con otras tablas
+  id              Int               @id @default(autoincrement())
+  account_id      Int               @unique
+  account         accounts          @relation(fields: [account_id], references: [id])
+  country_id      Int
+  country         countries         @relation(fields: [country_id], references: [id])
+  state_id        Int
+  state           states            @relation(fields: [state_id], references: [id])
+  city_id         Int
+  city            cities            @relation(fields: [city_id], references: [id])
+  status_id       Int
+  business_status business_statuses @relation(fields: [status_id], references: [id])
+  name            String?
+  vision          String?
+  mission         String?
+  motto           String?
+  postal_code     String?
+  cell_phone      String?
+  home_phone      String?
+  tax_id          String?
+  website_url     String?
+  logo_url        String?
+  open_hours      String?
+  updated_at      DateTime          @default(now()) @updatedAt
+  created_at      DateTime          @default(now())
   clients         clients[]
   invoices        invoices[]
   reservations    reservations[]
 }
 
-
 model accounts {
-  id                 Int      @id @default(autoincrement()) // Identificador único autoincremental
-  email              String   @unique // Correo electrónico único para la autenticación
-  password_hash      String // Hash de la contraseña para mayor seguridad
-  is_email_verified  Boolean  @default(false) // Indicador de si el correo electrónico ha sido verificado
-  is_person_verified Boolean  @default(false) // Indicador de si la identidad de la persona ha sido verificada
-  updated_at         DateTime @default(now()) @updatedAt // Fecha de actualización automática
-  created_at         DateTime @default(now()) // Fecha de creación de la cuenta
-
-  // Relación uno a uno con `users`
-  user users? // Relación uno a uno con `users` (sin `fields` ni `references`)
-  
-  businesses businesses? // Relación uno a uno con `businesses`
+  id                 Int         @id @default(autoincrement())
+  email              String      @unique
+  password_hash      String
+  is_email_verified  Boolean     @default(false)
+  is_person_verified Boolean     @default(false)
+  updated_at         DateTime    @default(now()) @updatedAt
+  created_at         DateTime    @default(now())
+  user               users?
+  businesses         businesses?
 }
 
-
-
-// Tabla `users`: Almacena información personal de los usuarios, como nombre, apellido, género y fecha de nacimiento.
 model users {
-  id                Int             @id @default(autoincrement()) // Identificador único autoincremental
-  account_id        Int @unique // Clave foránea única para garantizar la relación uno a uno
-  account           accounts        @relation(fields: [account_id], references: [id]) // Relación uno a uno con `accounts`
-  
-  gender_id         Boolean // Clave foránea para la relación con `genders`
-  gender            genders         @relation(fields: [gender_id], references: [id]) // Relación muchos a uno con `genders`
-
-  type_documents_id Int // Clave foránea para la relación con `type_documents`
-  type_documents    type_documents? @relation(fields: [type_documents_id], references: [id]) // Relación uno a uno con `type_documents`
-  
-  first_name        String // Nombre de pila del usuario
-  last_name         String // Apellido del usuario
-  birth_date        DateTime // Fecha de nacimiento del usuario
-
-  user_location user_locations? // Relación uno a uno con `user_locations`
-  user_contact  user_contacts? // Relación uno a uno con `user_contacts`
+  id                Int             @id @default(autoincrement())
+  account_id        Int             @unique
+  account           accounts        @relation(fields: [account_id], references: [id])
+  gender_id         Boolean
+  gender            genders         @relation(fields: [gender_id], references: [id])
+  type_documents_id Int
+  type_documents    type_documents? @relation(fields: [type_documents_id], references: [id])
+  first_name        String
+  last_name         String
+  birth_date        DateTime
+  user_location     user_locations?
+  user_contact      user_contacts?
 }
 
-
-
-
-// Tabla `user_locations`: Almacena la ubicación del usuario, incluyendo país, estado y ciudad.
 model user_locations {
-  id         Int       @id @default(autoincrement()) // Identificador único autoincremental
-  user_id    Int @unique // Clave foránea única para la relación uno a uno con la tabla `users`
-  user       users     @relation(fields: [user_id], references: [id]) // Relación uno a uno con `users`
-
-  country_id Int // Clave foránea para la relación con la tabla `countries`
-  country    countries @relation(fields: [country_id], references: [id]) // Relación muchos a uno con `countries`
-  
-  state_id   Int // Clave foránea para la relación con la tabla `states`
-  state      states    @relation(fields: [state_id], references: [id]) // Relación muchos a uno con `states`
-  
-  city_id    Int // Clave foránea para la relación con la tabla `cities`
-  city       cities    @relation(fields: [city_id], references: [id]) // Relación muchos a uno con `cities`
+  id         Int       @id @default(autoincrement())
+  user_id    Int       @unique
+  user       users     @relation(fields: [user_id], references: [id])
+  country_id Int
+  country    countries @relation(fields: [country_id], references: [id])
+  state_id   Int
+  state      states    @relation(fields: [state_id], references: [id])
+  city_id    Int
+  city       cities    @relation(fields: [city_id], references: [id])
 }
 
-
-// Tabla `user_contacts`: Almacena la información de contacto del usuario, como teléfono celular, teléfono de casa y código postal.
 model user_contacts {
-  id          Int     @id @default(autoincrement()) // Identificador único autoincremental
-  user_id     Int @unique // Clave foránea única para la relación uno a uno con la tabla `users`
-  user        users   @relation(fields: [user_id], references: [id]) // Relación uno a uno con `users`
-  
-  cell_phone  String? // Número de teléfono celular del usuario (opcional)
-  home_phone  String? // Número de teléfono de casa del usuario (opcional)
-  postal_code String? // Código postal de la dirección del usuario (opcional)
+  id          Int     @id @default(autoincrement())
+  user_id     Int     @unique
+  user        users   @relation(fields: [user_id], references: [id])
+  cell_phone  String?
+  home_phone  String?
+  postal_code String?
 }
-
 
 model type_documents {
-  id          Int      @id @default(autoincrement()) // Identificador único autoincremental
-  name        String   // Nombre del tipo de documento (Ej: Pasaporte, Cédula)
-  description String?  // Descripción del tipo de documento (opcional)
-  created_at  DateTime @default(now()) // Fecha de creación predeterminada
-  updated_at  DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  users users[] // Relación uno a muchos con `users`
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+  users       users[]
 }
-
 
 model genders {
-  id         Boolean  @id // Clave primaria de tipo booleano (1 para hombre, 0 para mujer)
-  name       String   // Nombre del género
-  short_name String   @default("") // Nombre corto con valor predeterminado
-  created_at DateTime @default(now()) // Fecha de creación predeterminada
-  updated_at DateTime @default(now()) @updatedAt // Fecha de actualización automática
-
-  users users[] // Relación uno a muchos con `users`
+  id         Boolean  @id
+  name       String
+  short_name String   @default("")
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  users      users[]
 }
-
