@@ -247,27 +247,28 @@ model accounts {
   updated_at         DateTime @default(now()) @updatedAt // Fecha de actualización automática
   created_at         DateTime @default(now()) // Fecha de creación de la cuenta
 
-  // Relación con otras tablas
-  users      users[] // Relación uno a muchos con la tabla `users`
-  businesses businesses[]
+  // Relación uno a uno con `users`
+  user users? @relation(fields: [id], references: [account_id]) // Relación uno a uno
+  businesses businesses? // Relación opcional con `businesses`
 }
 
 // Tabla `users`: Almacena información personal de los usuarios, como nombre, apellido, género y fecha de nacimiento.
 model users {
-  id               Int             @id @default(autoincrement()) // Identificador único autoincremental
-  account_id       Int // Clave foránea para la relación con la tabla `accounts`
-  account          accounts        @relation(fields: [account_id], references: [id]) // Relación muchos a uno con `accounts`
-  gender_id        Int // Clave foránea para la relación con la tabla `genders`
-  gender           genders         @relation(fields: [gender_id], references: [id]) // Relación muchos a uno con `genders`
-  type_documentsId Int
-  type_documents   type_documents? @relation(fields: [type_documentsId], references: [id])
-  first_name       String // Nombre de pila del usuario
-  last_name        String // Apellido del usuario
-  birth_date       DateTime // Fecha de nacimiento del usuario
+  id                Int             @id @default(autoincrement()) // Identificador único autoincremental
+  account_id        Int @unique // Clave foránea única para garantizar la relación uno a uno
+  account           accounts        @relation(fields: [account_id], references: [id]) // Relación uno a uno con `accounts`
+  gender            genders         @relation(fields: [gender_id], references: [id]) // Relación muchos a uno con `genders`
+  gender_id         Int // Clave foránea para la relación con la tabla `genders`
+  type_documents    type_documents? @relation(fields: [type_documents_id], references: [id])
+  type_documents_id Int
+  first_name        String // Nombre de pila del usuario
+  last_name         String // Apellido del usuario
+  birth_date        DateTime // Fecha de nacimiento del usuario
 
-  user_locations user_locations[] // Relación uno a muchos con la tabla `location_infos`
-  user_contacts  user_contacts[] // Relación uno a muchos con la tabla `contact_infos`
+  user_location user_locations? // Relación uno a uno con la tabla `user_locations`
+  user_contact  user_contacts? // Relación uno a uno con la tabla `user_contacts`
 }
+
 
 // Tabla `user_locations`: Almacena la ubicación del usuario, incluyendo país, estado y ciudad.
 model user_locations {
