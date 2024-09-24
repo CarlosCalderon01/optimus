@@ -1,17 +1,23 @@
 import { Module } from '@nestjs/common';
-import { CountriesModule } from './global/countries/countries.module';
-import { LanguagesModule } from './global/languages/languages.module';
-import { TypeDocumentsModule } from './global/type-documents/type-documents.module';
-import { StatesModule } from './global/states/states.module';
+import { HomeController } from './home.controller';
+import { GlobalModule } from './global/global.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
-    CountriesModule,
-    LanguagesModule,
-    TypeDocumentsModule,
-    StatesModule,
+    RouterModule.register([
+      {
+        path: 'home', // Define el prefijo /home
+        children: [
+          {
+            path: 'global', // Define el prefijo /home/global
+            module: GlobalModule, // Asocia el GlobalModule a esta ruta
+          },
+        ],
+      },
+    ]),
+    GlobalModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [HomeController],
 })
 export class HomeModule {}
