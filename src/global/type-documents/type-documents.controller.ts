@@ -11,7 +11,8 @@ import { TypeDocumentsService } from './type-documents.service';
 import { CreateTypeDocumentDto } from './dto/create-type-document.dto';
 import { UpdateTypeDocumentDto } from './dto/update-type-document.dto';
 
-@Controller('type-documents')
+@Controller('')
+// @Controller('type-documents')
 export class TypeDocumentsController {
   constructor(private readonly typeDocumentsService: TypeDocumentsService) {}
 
