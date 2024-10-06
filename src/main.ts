@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('API Documentation')
     .setDescription('API description')
     .setVersion('1.0')
+    .addTag('api')
     .build();
 
   // Habilitar la validación global
@@ -22,8 +23,10 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors(); // Habilitar CORS
+
   // http://localhost:3000/
-  await app.listen(3000);
+  await app.listen(3001);
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document); // Documentación accesible en /api

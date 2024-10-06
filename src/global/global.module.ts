@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { GlobalController } from './global.controller';
-// import alls master-table
+// import all master-table modules
 import { CountriesModule } from './countries/countries.module';
 import { StatesModule } from './states/states.module';
 import { LanguagesModule } from './languages/languages.module';
@@ -18,11 +18,11 @@ import { TypeDocumentsModule } from './type-documents/type-documents.module';
             module: CountriesModule,
           },
           {
-            path: 'languages',
+            path: 'states',
             module: StatesModule,
           },
           {
-            path: 'states',
+            path: 'languages',
             module: LanguagesModule,
           },
           {
@@ -41,42 +41,3 @@ import { TypeDocumentsModule } from './type-documents/type-documents.module';
   providers: [],
 })
 export class GlobalModule {}
-
-// import { Module } from '@nestjs/common';
-// //
-// import { GlobalController } from './global.controller';
-// import { RouterModule } from '@nestjs/core';
-// // import { CountriesController } from './countries/countries.controller';
-// // import { StatesController } from './states/states.controller';
-// // import { LanguagesController } from './languages/languages.controller';
-// // import { TypeDocumentsController } from './type-documents/type-documents.controller';
-// //
-// import { CountriesModule } from './countries/countries.module';
-// // import { StatesModule } from './states/states.module';
-// // import { LanguagesModule } from './languages/languages.module';
-// // import { TypeDocumentsModule } from './type-documents/type-documents.module';
-
-// @Module({
-//   imports: [
-//     // CountriesModule,
-//     // StatesModule,
-//     // LanguagesModule,
-//     // TypeDocumentsModule,
-//     RouterModule.register([
-//       {
-//         path: 'global',
-//         module: CountriesModule,
-//       },
-//     ]),
-//     CountriesModule,
-//   ],
-//   controllers: [
-//     GlobalController,
-//     // CountriesController,
-//     // StatesController,
-//     // LanguagesController,
-//     // TypeDocumentsController,
-//   ],
-//   providers: [],
-// })
-// export class GlobalModule {}

@@ -193,8 +193,8 @@ model accounts {
   password_hash      String
   is_email_verified  Boolean     @default(false)
   is_person_verified Boolean     @default(false)
-  updated_at         DateTime    @default(now()) @updatedAt
   created_at         DateTime    @default(now())
+  updated_at         DateTime    @default(now()) @updatedAt
   user               users?
   businesses         businesses?
 }

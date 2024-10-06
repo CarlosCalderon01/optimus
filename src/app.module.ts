@@ -1,10 +1,7 @@
-// PACKAGE
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
-// LOCAL
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
-// MODULE
 import { GlobalModule } from './global/global.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { BusinessModule } from './business/business.module';
@@ -18,28 +15,33 @@ import { DatabaseModule } from './database/database.module';
         path: '',
         children: [
           {
+            path: '',
+            module: AccountsModule,
+          },
+          {
+            path: '',
+            module: BusinessModule,
+          },
+          {
             path: 'global',
             module: GlobalModule,
           },
           {
-            path: 'accounts',
-            module: AccountsModule,
-          },
-          {
-            path: 'business',
-            module: BusinessModule,
-          },
-          {
-            path: 'users',
+            path: '',
             module: UsersModule,
           },
           {
-            path: 'database',
+            path: '',
             module: DatabaseModule,
           },
         ],
       },
     ]),
+    AccountsModule,
+    BusinessModule,
+    GlobalModule,
+    UsersModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

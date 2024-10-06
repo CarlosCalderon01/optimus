@@ -10,7 +10,7 @@ import {
 import { CountriesService } from './countries.service';
 import { countries } from '@prisma/client';
 
-@Controller('countries')
+@Controller('')
 export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
 
